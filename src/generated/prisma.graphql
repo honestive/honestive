@@ -1,0 +1,343 @@
+# source: https://eu1.prisma.sh/public-wavepiper-993/honestive/dev
+# timestamp: Fri Aug 10 2018 18:48:35 GMT+0300 (EEST)
+
+type AggregateRelease {
+  count: Int!
+}
+
+type BatchPayload {
+  """The number of nodes that have been affected by the Batch operation."""
+  count: Long!
+}
+
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Mutation {
+  createRelease(data: ReleaseCreateInput!): Release!
+  updateRelease(data: ReleaseUpdateInput!, where: ReleaseWhereUniqueInput!): Release
+  deleteRelease(where: ReleaseWhereUniqueInput!): Release
+  upsertRelease(where: ReleaseWhereUniqueInput!, create: ReleaseCreateInput!, update: ReleaseUpdateInput!): Release!
+  updateManyReleases(data: ReleaseUpdateInput!, where: ReleaseWhereInput): BatchPayload!
+  deleteManyReleases(where: ReleaseWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Query {
+  releases(where: ReleaseWhereInput, orderBy: ReleaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Release]!
+  release(where: ReleaseWhereUniqueInput!): Release
+  releasesConnection(where: ReleaseWhereInput, orderBy: ReleaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ReleaseConnection!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+type Release implements Node {
+  id: ID!
+  version: String!
+  title: String!
+  description: String!
+}
+
+"""A connection to a list of items."""
+type ReleaseConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ReleaseEdge]!
+  aggregate: AggregateRelease!
+}
+
+input ReleaseCreateInput {
+  version: String!
+  title: String!
+  description: String!
+}
+
+"""An edge in a connection."""
+type ReleaseEdge {
+  """The item at the end of the edge."""
+  node: Release!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ReleaseOrderByInput {
+  id_ASC
+  id_DESC
+  version_ASC
+  version_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ReleasePreviousValues {
+  id: ID!
+  version: String!
+  title: String!
+  description: String!
+}
+
+type ReleaseSubscriptionPayload {
+  mutation: MutationType!
+  node: Release
+  updatedFields: [String!]
+  previousValues: ReleasePreviousValues
+}
+
+input ReleaseSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ReleaseSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ReleaseSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ReleaseSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ReleaseWhereInput
+}
+
+input ReleaseUpdateInput {
+  version: String
+  title: String
+  description: String
+}
+
+input ReleaseWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ReleaseWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ReleaseWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ReleaseWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  version: String
+
+  """All values that are not equal to given value."""
+  version_not: String
+
+  """All values that are contained in given list."""
+  version_in: [String!]
+
+  """All values that are not contained in given list."""
+  version_not_in: [String!]
+
+  """All values less than the given value."""
+  version_lt: String
+
+  """All values less than or equal the given value."""
+  version_lte: String
+
+  """All values greater than the given value."""
+  version_gt: String
+
+  """All values greater than or equal the given value."""
+  version_gte: String
+
+  """All values containing the given string."""
+  version_contains: String
+
+  """All values not containing the given string."""
+  version_not_contains: String
+
+  """All values starting with the given string."""
+  version_starts_with: String
+
+  """All values not starting with the given string."""
+  version_not_starts_with: String
+
+  """All values ending with the given string."""
+  version_ends_with: String
+
+  """All values not ending with the given string."""
+  version_not_ends_with: String
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+}
+
+input ReleaseWhereUniqueInput {
+  id: ID
+}
+
+type Subscription {
+  release(where: ReleaseSubscriptionWhereInput): ReleaseSubscriptionPayload
+}
