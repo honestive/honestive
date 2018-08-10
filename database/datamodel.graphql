@@ -4,3 +4,13 @@ type Release {
   title: String!
   description: String!
 }
+
+type GitHubRelease {
+  id: ID! @unique
+  gitHubId: ID! @unique
+  tagName: String!
+  name: String!
+  description: String!
+  url: String!
+  publishedAt: DateTime!
+}

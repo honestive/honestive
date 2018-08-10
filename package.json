@@ -7,7 +7,10 @@
     "prisma": "prisma"
   },
   "dependencies": {
+    "graphql-binding-github": "^0.3.25",
+    "graphql-import": "^0.6.0",
     "graphql-yoga": "1.15.1",
+    "lodash": "^4.17.10",
     "prisma-binding": "2.1.4"
   },
   "devDependencies": {
