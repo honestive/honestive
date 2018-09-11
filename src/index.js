@@ -1,3 +1,4 @@
+require('dotenv').config()
 const { GraphQLServer } = require('graphql-yoga')
 const { Github } = require('graphql-binding-github')
 const { Prisma } = require('prisma-binding')
@@ -5,7 +6,9 @@ const { importSchema } = require('graphql-import')
 const _ = require('lodash')
 
 const typeDefs = importSchema('./src/schema.graphql')
-const token = 'SECRET-TOKEN'
+const token = process.env.GITHUB_TOKEN
+const owner = process.env.GITHUB_REPOSITORY_OWNER
+const name = process.env.GITHUB_REPOSITORY_NAME
 const gitHub = new Github(token)
 const repositoryReleasesFragment = `
   {
@@ -16,6 +19,8 @@ const repositoryReleasesFragment = `
         description
         url
         publishedAt
+        isDraft
+
         tag {
           name
         }
@@ -26,8 +31,23 @@ const repositoryReleasesFragment = `
 
 const resolvers = {
   Query: {
-    releases(parent, args, ctx, info) {
-      return ctx.db.query.releases({}, info)
+    async releases(parent, args, ctx, info) {
+      const gitHubReleases = await ctx.db.query.gitHubReleases(args,
+        `{ id tagName name description publishedAt }`)
+
+      return _.map(gitHubReleases, ({
+        id,
+        tagName,
+        name,
+        description,
+        publishedAt,
+      }) => ({
+        id,
+        version: tagName,
+        title: name,
+        description,
+        publishedAt,
+      }))
     },
     gitHubReleases(parent, args, ctx, info) {
       return ctx.db.query.gitHubReleases(args, info)
@@ -35,18 +55,16 @@ const resolvers = {
   },
   Mutation: {
     async syncGitHubReleases(parent, args, ctx, info) {
-      const owner = 'Nedomas'
-      const name = 'honestive-testing'
       const repository = await gitHub.query.repository({ owner, name }, repositoryReleasesFragment)
 
       const serialize = (release) => {
-        const result = _.omit(_.cloneDeep(release), 'id', 'tag')
+        const result = _.omit(_.cloneDeep(release), 'id', 'tag', 'isDraft')
         result.gitHubId = release.id
-        result.tagName = release.tag.name
+        result.tagName = _.get(release, 'tag.name')
         return result
       }
 
-      await Promise.all(_.map(_.compact(repository.releases.nodes), (release) => {
+      await Promise.all(_.map(_.reject(_.compact(repository.releases.nodes), 'isDraft'), (release) => {
         const serializedRelease = serialize(release)
         return ctx.db.mutation.upsertGitHubRelease({
           where: _.pick(serializedRelease, 'gitHubId'),
@@ -68,11 +86,15 @@ const server = new GraphQLServer({
     ...req,
     db: new Prisma({
       typeDefs: 'src/generated/prisma.graphql', // the auto-generated GraphQL schema of the Prisma API
-      endpoint: 'https://eu1.prisma.sh/public-wavepiper-993/honestive/dev', // the endpoint of the Prisma API
+      endpoint: process.env.PRISMA_ENDPOINT_URL, // the endpoint of the Prisma API
       debug: true, // log all GraphQL queries & mutations sent to the Prisma API
       // secret: 'mysecret123', // only needed if specified in `database/prisma.yml`
     }),
   }),
+})
+
+server.express.post('/webhook', (req, res) => {
+  res.json({ success: true })
 })
 
 server.start(() => console.log('Server is running on http://localhost:4000'))

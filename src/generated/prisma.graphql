@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/public-wavepiper-993/honestive/dev
-# timestamp: Sat Aug 11 2018 01:48:45 GMT+0300 (EEST)
+# timestamp: Sat Aug 25 2018 20:14:41 GMT+0300 (EEST)
 
 type AggregateGitHubRelease {
   count: Int!
@@ -479,6 +479,7 @@ type Release implements Node {
   version: String!
   title: String!
   description: String!
+  publishedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -495,6 +496,7 @@ input ReleaseCreateInput {
   version: String!
   title: String!
   description: String!
+  publishedAt: DateTime!
 }
 
 """An edge in a connection."""
@@ -515,6 +517,8 @@ enum ReleaseOrderByInput {
   title_DESC
   description_ASC
   description_DESC
+  publishedAt_ASC
+  publishedAt_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -526,6 +530,7 @@ type ReleasePreviousValues {
   version: String!
   title: String!
   description: String!
+  publishedAt: DateTime!
 }
 
 type ReleaseSubscriptionPayload {
@@ -571,6 +576,7 @@ input ReleaseUpdateInput {
   version: String
   title: String
   description: String
+  publishedAt: DateTime
 }
 
 input ReleaseWhereInput {
@@ -742,6 +748,28 @@ input ReleaseWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
+  publishedAt: DateTime
+
+  """All values that are not equal to given value."""
+  publishedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  publishedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  publishedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  publishedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  publishedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  publishedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  publishedAt_gte: DateTime
 }
 
 input ReleaseWhereUniqueInput {
