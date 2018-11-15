@@ -31,21 +31,32 @@ const repositoryReleasesFragment = `
 
 const resolvers = {
   Query: {
+    repository(parent, args, ctx, info) {
+      return {
+        type: 'github',
+        owner,
+        name,
+        url: `https://github.com/${owner}/${name}`,
+        releasesUrl: `https://github.com/${owner}/${name}/releases`,
+      }
+    },
     async releases(parent, args, ctx, info) {
       const gitHubReleases = await ctx.db.query.gitHubReleases(args,
-        `{ id tagName name description publishedAt }`)
+        `{ id tagName name description url publishedAt }`)
 
       return _.map(gitHubReleases, ({
         id,
         tagName,
         name,
         description,
+        url,
         publishedAt,
       }) => ({
         id,
         version: tagName,
         title: name,
         description,
+        url,
         publishedAt,
       }))
     },

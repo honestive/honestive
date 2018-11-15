@@ -1,12 +1,22 @@
-# import Release from "./generated/prisma.graphql"
 # import GitHubRelease from "./generated/prisma.graphql"
 # import Mutation.upsertGitHubRelease from "./generated/prisma.graphql"
 
 type Query {
+  repository: Repository!
   releases: [Release!]!
   gitHubReleases: [GitHubRelease!]!
 }
 
 type Mutation {
   syncGitHubReleases: Boolean
+}
+
+type Release {
+  id: ID!
+  version: String!
+  url: String!
+}
+
+type Repository {
+  releasesUrl: String!
 }

@@ -4,6 +4,7 @@ type Release {
   title: String!
   description: String!
   publishedAt: DateTime!
+  url: String!
 }
 
 type GitHubRelease {
