@@ -1,0 +1,19 @@
+type GitHubRelease {
+  id: ID! @unique
+  gitHubId: String! @unique
+  isDraft: Boolean!
+  publishedAt: DateTime!
+  url: String!
+  gitHubTag: GitHubTag @relation(name: "GitHubReleaseGitHubTag")
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type GitHubTag {
+  id: ID! @unique
+  gitHubId: String! @unique
+  gitHubRelease: GitHubRelease! @relation(name: "GitHubReleaseGitHubTag")
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
