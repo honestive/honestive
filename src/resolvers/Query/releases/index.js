@@ -7,7 +7,7 @@ module.exports = async (root, args, ctx) => {
     where: {
       isDraft: false,
     },
-    last: args.last || 5,
+    last: args.last,
   }).$fragment(fragment)
 
   return _.map(gitHubReleases, serialize)

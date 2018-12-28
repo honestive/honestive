@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const { HttpLink } = require('apollo-link-http')
 const { ApolloClient } = require('apollo-client')
 const { InMemoryCache } = require('apollo-cache-inmemory')
@@ -14,7 +15,7 @@ module.exports = async () => {
     variables: {
       owner: process.env.GITHUB_REPOSITORY_OWNER,
       name: process.env.GITHUB_REPOSITORY_NAME,
-      last: 100,
+      projectNumber: _.toInteger(process.env.GITHUB_PROJECT_NUMBER),
     },
     context: {
       headers: {
@@ -23,5 +24,5 @@ module.exports = async () => {
     },
   })
 
-  return response.data.repository.releases.nodes
+  return response.data.repository.project.columns.nodes
 }

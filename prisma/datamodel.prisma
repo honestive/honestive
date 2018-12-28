@@ -17,3 +17,34 @@ type GitHubTag {
   createdAt: DateTime!
   updatedAt: DateTime!
 }
+
+type GitHubProjectColumn {
+  id: ID! @unique
+  gitHubId: String! @unique
+  gitHubProjectCards: [GitHubProjectCard!]!
+  name: String!
+  purpose: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type GitHubProjectCard {
+  id: ID! @unique
+  gitHubId: String! @unique
+  gitHubProjectColumn: GitHubProjectColumn!
+  gitHubProjectCardContent: GitHubProjectCardItem
+  note: String
+  url: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type GitHubProjectCardItem {
+  id: ID! @unique
+  gitHubId: String! @unique
+  title: String!
+  bodyText: String!
+  url: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

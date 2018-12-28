@@ -5,6 +5,18 @@ var typeDefs = require("./prisma-schema").typeDefs;
 
 var models = [
   {
+    name: "GitHubProjectCard",
+    embedded: false
+  },
+  {
+    name: "GitHubProjectCardItem",
+    embedded: false
+  },
+  {
+    name: "GitHubProjectColumn",
+    embedded: false
+  },
+  {
     name: "GitHubRelease",
     embedded: false
   },
