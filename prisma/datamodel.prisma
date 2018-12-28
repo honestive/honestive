@@ -48,3 +48,12 @@ type GitHubProjectCardItem {
   createdAt: DateTime!
   updatedAt: DateTime!
 }
+
+type GoogleAnalyticsPageviews {
+  id: ID! @unique
+  startTime: DateTime!
+  endTime: DateTime!
+  value: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

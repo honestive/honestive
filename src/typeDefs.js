@@ -8,6 +8,7 @@ module.exports = gql`
   type Mutation {
     syncGitHubReleases: Boolean
     syncGitHubProject: Boolean
+    syncGoogleAnalyticsPageviews: Boolean
   }
 
   type Release {
